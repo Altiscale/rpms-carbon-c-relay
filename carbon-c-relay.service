@@ -1,0 +1,15 @@
+[Unit]
+Description=Enhanced C implementation of Carbon relay, aggregator and rewriter
+After=network.target
+
+[Service]
+User=carbon-c-relay
+Type=simple
+EnvironmentFile=-/etc/sysconfig/carbon-c-relay
+ExecStart=/usr/bin/carbon-c-relay -f /etc/carbon-c-relay.conf $ARGS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
