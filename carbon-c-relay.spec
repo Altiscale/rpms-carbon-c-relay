@@ -8,7 +8,7 @@
 %endif
 
 Name:               carbon-c-relay
-Version:            2.2
+Version:            2.3
 Release:            2%{?dist}
 Summary:            Enhanced C implementation of Carbon relay, aggregator and rewriter
 License:            ASL 2.0
