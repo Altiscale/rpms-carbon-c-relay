@@ -7,14 +7,17 @@
 %global build_manpage 1
 %endif
 
+%global commit0 65d42593085b74e74dfebf793b50c0d8387bfa16
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+
 Name:               carbon-c-relay
-Version:            2.3
-Release:            2%{?dist}
+Version:            2.4
+Release:            0%{?dist}
 Summary:            Enhanced C implementation of Carbon relay, aggregator and rewriter
 License:            ASL 2.0
 Group:              System Environment/Daemons
 URL:                https://github.com/grobian/carbon-c-relay
-Source:             https://github.com/grobian/carbon-c-relay/archive/v%{version}.tar.gz
+Source0:            https://github.com/grobian/%{name}/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
 Source1:            carbon-c-relay.service
 Source2:            carbon-c-relay.init
 Source3:            carbon-c-relay.logrotate
@@ -65,7 +68,7 @@ clusters for each and every metric based on pattern matches.
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{commit0}
 
 
 %build
@@ -168,6 +171,9 @@ fi
 
 
 %changelog
+* Tue Nov 08 2016 Piotr Popieluch <piotr1212@gmail.com> - - 2.3-1
+- Update to 2.3
+
 * Fri Sep 16 2016 Piotr Popieluch <piotr1212@gmail.com> - - 2.2-2
 - Remove braces from systemd service file to correctly interpret arguments
 
