@@ -24,7 +24,7 @@ Source3:            carbon-c-relay.logrotate
 Source4:            carbon-c-relay.sysconfig.sysv
 Source5:            carbon-c-relay.conf
 Source6:            carbon-c-relay.sysconfig.systemd
-Source7:            carbon-c-relay.limits.systemd
+
 
 BuildRequires:      gcc
 BuildRequires:      make
