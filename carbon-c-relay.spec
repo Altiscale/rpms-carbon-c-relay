@@ -7,12 +7,12 @@
 %global build_manpage 1
 %endif
 
-%global commit0 65d42593085b74e74dfebf793b50c0d8387bfa16
+%global commit0 9cdf4d4e78bfc2b96085ece6b652f7be4cd02ce5
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Name:               carbon-c-relay
-Version:            2.4
-Release:            0%{?dist}
+Version:            2.6
+Release:            2%{?dist}
 Summary:            Enhanced C implementation of Carbon relay, aggregator and rewriter
 License:            ASL 2.0
 Group:              System Environment/Daemons
@@ -24,6 +24,7 @@ Source3:            carbon-c-relay.logrotate
 Source4:            carbon-c-relay.sysconfig.sysv
 Source5:            carbon-c-relay.conf
 Source6:            carbon-c-relay.sysconfig.systemd
+Source7:            carbon-c-relay.limits.systemd
 
 BuildRequires:      gcc
 BuildRequires:      make
@@ -83,23 +84,24 @@ ronn-nodejs --roff carbon-c-relay.md > carbon-c-relay.1
 rm -rf %{buildroot}
 %endif
 
-install -Dp -m0755 relay %{buildroot}%{_bindir}/carbon-c-relay
-install -Dp -m0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/carbon-c-relay.conf
+install -Dp -m0755 relay %{buildroot}%{_bindir}/%{name}
+install -Dp -m0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 %if 0%{?build_manpage}
 install -Dp -m0644 carbon-c-relay.1 %{buildroot}%{_mandir}/man1/carbon-c-relay.1
 %endif
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
-mkdir -p %{buildroot}%{_localstatedir}/log/carbon-c-relay
-mkdir -p %{buildroot}%{_localstatedir}/run/carbon-c-relay
+mkdir -p %{buildroot}%{_localstatedir}/log/%{name}
+mkdir -p %{buildroot}%{_localstatedir}/run/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -Dp -m0755 %{SOURCE2} %{buildroot}%{_initddir}/%{name}
 install -Dp -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-install -Dp -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/sysconfig/carbon-c-relay
+install -Dp -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 %else
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
-install -Dp -m0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/carbon-c-relay
+install -Dp -m0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -Dp -m0644 %{SOURCE7} %{buildroot}%{_sysconfdir}/systemd/system/%{name}.service.d/limits.conf
 %endif
 
 
@@ -167,10 +169,21 @@ fi
 %{_sysconfdir}/logrotate.d/%{name}
 %else
 %{_unitdir}/%{name}.service
+%dir %{_sysconfdir}/systemd/system/%{name}.service.d
+%config(noreplace) %{_sysconfdir}/systemd/system/%{name}.service.d/limits.conf
 %endif
 
 
 %changelog
+* Tue Feb 07 2017 <piotrp@fedoraproject.org> - 2.6-2
+- Add example systemd limits configuration
+
+* Thu Jan 26 2017 piotr1212@gmail.com - 2.6-1
+- Update to 2.6
+
+* Wed Jan 11 2017 piotr1212@gmail.com - 2.5-1
+- Update to 2.5
+
 * Tue Nov 08 2016 Piotr Popieluch <piotr1212@gmail.com> - - 2.3-1
 - Update to 2.3
 
